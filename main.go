@@ -21,19 +21,20 @@ func main() {
 			err := eraseDir(arg, os.Stderr)
 			if err != nil {
 				eprintf("%v\n", err)
-				return
+				os.Exit(1)
 			}
 		case tp.IsExistingFile():
 			err := eraseFile(arg)
 			if err != nil {
 				eprintf("%v\n", err)
-				return
+				os.Exit(1)
 			}
 		case tp.IsNotExisting():
 			eprintf("%v: not found\n", arg)
-			return
+			os.Exit(1)
 		default:
-			panic("unsupported file type")
+			eprintf("unsupported file type")
+			os.Exit(1)
 		}
 	}
 }

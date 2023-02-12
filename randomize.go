@@ -39,6 +39,7 @@ func randomizeFile(path string) error {
 	if err != nil {
 		return catPathAndErr(path, err)
 	}
+	defer f.Close()
 
 	stat, err := f.Stat()
 	if err != nil {

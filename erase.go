@@ -42,6 +42,7 @@ func eraseDir(path string, errWriter io.Writer) error {
 					errOccurred.CompareAndSwap(false, true)
 				}
 			}(filepath.Join(path, entry.Name()))
+			continue
 		}
 		wg.Add(1)
 		go func(path string) {

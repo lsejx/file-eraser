@@ -20,13 +20,12 @@ func main() {
 		case tp.IsDir():
 			err := eraseDir(arg, os.Stderr)
 			if err != nil {
-				eprintf("%v\n", err)
 				os.Exit(1)
 			}
 		case tp.IsExistingFile():
 			err := eraseFile(arg)
 			if err != nil {
-				eprintf("%v\n", err)
+				eprintf("error: %v\n", err)
 				os.Exit(1)
 			}
 		case tp.IsNotExisting():

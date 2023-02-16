@@ -43,6 +43,7 @@ func main() {
 		if argIsOp {
 			continue
 		}
+
 		tp := fpath.GetType(arg)
 		switch {
 		case tp.IsDir():
@@ -50,9 +51,9 @@ func main() {
 				eprintf("%v: is a directory\n", arg)
 				continue
 			}
-			eraseDir(arg, os.Stderr)
+			eraseDir(arg, op.interactive, stdErr)
 		case tp.IsExistingFile():
-			err := eraseFile(arg)
+			err := eraseFile(arg, op.interactive)
 			if err != nil {
 				eprintf("error: %v\n", err)
 			}

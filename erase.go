@@ -10,7 +10,16 @@ import (
 	"sync/atomic"
 )
 
-func eraseFile(path string) error {
+func eraseFile(path string, interactive bool) error {
+	if interactive {
+		yes, err := interacter.ask(path)
+		if err != nil {
+			return err
+		}
+		if !yes {
+			return nil
+		}
+	}
 	err := randomizeFile(path)
 	if err != nil {
 		return err
@@ -22,7 +31,7 @@ func eraseFile(path string) error {
 	return nil
 }
 
-func eraseDir(path string, errWriter io.Writer) error {
+func eraseDir(path string, interactive bool, errWriter io.Writer) error {
 	entries, err := os.ReadDir(path)
 	if err != nil {
 		return err
@@ -38,7 +47,7 @@ func eraseDir(path string, errWriter io.Writer) error {
 			wg.Add(1)
 			go func(path string) {
 				defer wg.Done()
-				if eraseDir(path, errWriter) != nil {
+				if eraseDir(path, interactive, errWriter) != nil {
 					errOccurred.CompareAndSwap(false, true)
 				}
 			}(filepath.Join(path, entry.Name()))
@@ -47,7 +56,7 @@ func eraseDir(path string, errWriter io.Writer) error {
 		wg.Add(1)
 		go func(path string) {
 			defer wg.Done()
-			err := eraseFile(path)
+			err := eraseFile(path, interactive)
 			if err != nil {
 				errOccurred.CompareAndSwap(false, true)
 				fmt.Fprintf(errWriter, "error: %v\n", err)

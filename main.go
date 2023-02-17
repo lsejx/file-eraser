@@ -14,8 +14,7 @@ func eprintf(format string, a ...any) {
 
 var cmdName = filepath.Base(os.Args[0])
 
-var helpMes = fmt.Sprintf(`
-options:
+var helpMes = fmt.Sprintf(`options:
     %v help
     -%c recursive
     -%c interactive

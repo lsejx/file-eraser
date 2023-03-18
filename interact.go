@@ -30,7 +30,8 @@ func (p *interactT) ask(path string) (bool, error) {
 	var ans string
 	for {
 		fmt.Printf("erase %v? (y/n) > ", path)
-		ans, err := readLine()
+		var err error
+		ans, err = readLine()
 		if err != nil {
 			return false, err
 		}

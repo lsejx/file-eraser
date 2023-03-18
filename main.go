@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	fpath "example.com/me/filepath"
 )
@@ -12,18 +11,11 @@ func eprintf(format string, a ...any) {
 	fmt.Fprintf(os.Stderr, format, a...)
 }
 
-var cmdName = filepath.Base(os.Args[0])
-
-var helpMes = fmt.Sprintf(`options:
+var helpMsg = fmt.Sprintf(`options:
     %v help
-    -%c recursive
-    -%c interactive
-
-examples:
-    %v %v
-    %v file0 file1
-    %v -%c dir0 file0
-`, helpOpFull, recOp, intOp, cmdName, helpOpFull, cmdName, cmdName, recOp)
+    %c%c recursive
+    %c%c interactive
+`, helpOpFull, opPre, recOp, opPre, intOp)
 
 func main() {
 	args := os.Args[1:]
@@ -32,7 +24,7 @@ func main() {
 		return
 	}
 	if args[0] == helpOpFull {
-		fmt.Print(helpMes)
+		fmt.Print(helpMsg)
 		return
 	}
 

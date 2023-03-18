@@ -1,34 +1,22 @@
 package main
 
 import (
-	"errors"
+	"crypto/rand"
 	"io"
 	"os"
-
-	rand "example.com/me/hashed_random"
 )
 
 func randomize(dst io.Writer, length int64) error {
 	buf := make([]byte, length)
 
-	randomSrc, err := rand.NewHashedRandomReader()
+	_, err := io.ReadFull(rand.Reader, buf)
 	if err != nil {
 		return err
-	}
-	n, err := io.ReadFull(randomSrc, buf)
-	if err != nil {
-		return err
-	}
-	if n != len(buf) {
-		return errors.New("failed to read enough from random source")
 	}
 
-	n, err = dst.Write(buf)
+	_, err = dst.Write(buf)
 	if err != nil {
 		return err
-	}
-	if int64(n) != length {
-		return errors.New("failed to fully randomize the file")
 	}
 
 	return nil

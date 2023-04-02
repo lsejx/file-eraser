@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	fpath "example.com/me/filepath"
+	fpath "github.com/lsejx/go-filepath"
 )
 
 func eprintf(format string, a ...any) {
@@ -43,7 +43,7 @@ func main() {
 				continue
 			}
 			eraseDir(arg, op.interactive, stdErr)
-		case tp.IsExistingFile():
+		case tp.IsExisting():
 			err := eraseFile(arg, op.interactive)
 			if err != nil {
 				eprintf("error: %v\n", err)

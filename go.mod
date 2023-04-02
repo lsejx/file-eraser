@@ -1,7 +1,5 @@
-module eraser
-
-replace example.com/me/filepath => ../filepath
+module github.com/lsejx/file-eraser
 
 go 1.19
 
-require example.com/me/filepath v0.0.0-00010101000000-000000000000
+require github.com/lsejx/go-filepath v0.0.0

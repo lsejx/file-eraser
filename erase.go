@@ -26,7 +26,7 @@ func eraseFile(path string, interactive bool) error {
 	}
 	err = os.Remove(path)
 	if err != nil {
-		return fmt.Errorf("%v: failed to remove: %v", path, err)
+		return catPathAndErr(path, "remove error", err)
 	}
 	return nil
 }
@@ -56,8 +56,7 @@ func eraseDir(path string, interactive bool, errWriter io.Writer) error {
 		wg.Add(1)
 		go func(path string) {
 			defer wg.Done()
-			err := eraseFile(path, interactive)
-			if err != nil {
+			if err := eraseFile(path, interactive); err != nil {
 				errOccurred.CompareAndSwap(false, true)
 				fmt.Fprintf(errWriter, "error: %v\n", err)
 			}

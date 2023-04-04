@@ -23,20 +23,21 @@ func randomize(dst io.Writer, length int64) error {
 }
 
 func randomizeFile(path string) error {
+	errSummary := "randomize error"
 	f, err := os.OpenFile(path, os.O_WRONLY, 0600)
 	if err != nil {
-		return catPathAndErr(path, err)
+		return catPathAndErr(path, errSummary, err)
 	}
 	defer f.Close()
 
 	stat, err := f.Stat()
 	if err != nil {
-		return catPathAndErr(path, err)
+		return catPathAndErr(path, errSummary, err)
 	}
 
 	err = randomize(f, stat.Size())
 	if err != nil {
-		return catPathAndErr(path, err)
+		return catPathAndErr(path, errSummary, err)
 	}
 	return nil
 }

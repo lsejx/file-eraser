@@ -11,7 +11,9 @@ func eprintf(format string, a ...any) {
 	fmt.Fprintf(os.Stderr, format, a...)
 }
 
-var helpMsg = fmt.Sprintf(`options:
+var helpMsg = fmt.Sprintf(`file-eraser [option] [path] ...
+
+options:
     %v help
     %c%c recursive
     %c%c interactive

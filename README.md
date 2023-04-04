@@ -11,3 +11,10 @@ Its randomness depends on crypto/rand.Reader in Go standard library.<br>
 	-r	recursive (for directory)
 	-i	interactive (confirm before erasing)
 <br><br>
+
+
+# Usage
+	file-eraser -h
+	file-eraser file1
+	file-eraser -r file1 dir1
+	file-eraser -ri dir1

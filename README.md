@@ -6,7 +6,10 @@ Its randomness depends on crypto/rand.Reader in Go standard library.<br>
 <br>
 <br>
 
-# Options
+# Installation
+	go install github.com/lsejx/file-eraser@latest
+
+# Option
 	-h	help
 	-r	recursive (for directory)
 	-i	interactive (confirm before erasing)

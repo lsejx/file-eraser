@@ -22,8 +22,17 @@ func randomize(dst io.Writer, length int64) error {
 	return nil
 }
 
-func randomizeFile(path string) error {
+func randomizeFile(path string, interactive bool) error {
 	errSummary := "randomize error"
+	if interactive {
+		yes, err := interacter.ask(path)
+		if err != nil {
+			return catPathAndErr(path, errSummary, err)
+		}
+		if !yes {
+			return nil
+		}
+	}
 	f, err := os.OpenFile(path, os.O_WRONLY, 0600)
 	if err != nil {
 		return catPathAndErr(path, errSummary, err)

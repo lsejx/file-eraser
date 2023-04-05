@@ -11,16 +11,7 @@ import (
 )
 
 func eraseFile(path string, interactive bool) error {
-	if interactive {
-		yes, err := interacter.ask(path)
-		if err != nil {
-			return err
-		}
-		if !yes {
-			return nil
-		}
-	}
-	err := randomizeFile(path)
+	err := randomizeFile(path, interactive)
 	if err != nil {
 		return err
 	}

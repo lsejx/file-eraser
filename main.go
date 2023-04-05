@@ -50,18 +50,18 @@ func main() {
 				continue
 			}
 			wg.Add(1)
-			go func(path string) {
+			go func(path string, op option) {
 				defer wg.Done()
-				eraseDir(path, op.interactive, stdErr)
-			}(arg)
+				eraseDir(path, op, stdErr)
+			}(arg, op)
 		default:
 			wg.Add(1)
-			go func(path string) {
+			go func(path string, op option) {
 				defer wg.Done()
-				if err := eraseFile(path, op.interactive); err != nil {
+				if err := eraseFile(path, op); err != nil {
 					eprintf("%v\n", err)
 				}
-			}(arg)
+			}(arg, op)
 		}
 	}
 	wg.Wait()

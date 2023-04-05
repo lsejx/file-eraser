@@ -16,8 +16,8 @@ var helpMsg = fmt.Sprintf(`file-eraser [option] [path] ...
 
 options:
     %v help
-    %c%c recursive
-    %c%c interactive
+    %c%c recursive (for directory)
+    %c%c interactive (confirm before erasing)
 `, helpOpFull, opPre, recOp, opPre, intOp)
 
 func main() {

@@ -15,6 +15,9 @@ func eraseFile(path string, op option) error {
 	if err != nil {
 		return err
 	}
+	if op.keep {
+		return nil
+	}
 	err = os.Remove(path)
 	if err != nil {
 		return catPathAndErr(path, "remove error", err)

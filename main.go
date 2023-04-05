@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	fpath "github.com/lsejx/go-filepath"
 )
 
 func eprintf(format string, a ...any) {
-	fmt.Fprintf(os.Stderr, format, a...)
+	fmt.Fprintf(stdErr, format, a...)
 }
 
 var helpMsg = fmt.Sprintf(`file-eraser [option] [path] ...
@@ -30,6 +31,7 @@ func main() {
 		return
 	}
 
+	var wg sync.WaitGroup
 	op := newOption()
 	for _, arg := range args {
 		argIsOp := op.read(arg)
@@ -46,12 +48,20 @@ func main() {
 				eprintf("%v: is a directory\n", arg)
 				continue
 			}
-			eraseDir(arg, op.interactive, stdErr)
+			wg.Add(1)
+			go func(path string) {
+				defer wg.Done()
+				eraseDir(path, op.interactive, stdErr)
+			}(arg)
 		default:
-			err := eraseFile(arg, op.interactive)
-			if err != nil {
-				eprintf("error: %v\n", err)
-			}
+			wg.Add(1)
+			go func(path string) {
+				defer wg.Done()
+				if err := eraseFile(path, op.interactive); err != nil {
+					eprintf("%v\n", err)
+				}
+			}(arg)
 		}
 	}
+	wg.Wait()
 }

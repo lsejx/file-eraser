@@ -7,6 +7,7 @@ const (
 	helpOpFull = "-h"
 	recOp      = 'r'
 	intOp      = 'i'
+	keepOp     = 'k'
 )
 
 type option struct {

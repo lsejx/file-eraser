@@ -18,7 +18,8 @@ options:
     %v help
     %c%c recursive (for directory)
     %c%c interactive (confirm before erasing)
-`, helpOpFull, opPre, recOp, opPre, intOp)
+    %c%c keep (randomize, but don't remove)
+`, helpOpFull, opPre, recOp, opPre, intOp, opPre, keepOp)
 
 func main() {
 	args := os.Args[1:]

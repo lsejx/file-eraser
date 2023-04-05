@@ -8,11 +8,13 @@ Its randomness depends on crypto/rand.Reader in Go standard library.<br>
 
 # Installation
 	go install github.com/lsejx/file-eraser@latest
+<br><br>
 
 # Option
 	-h	help
 	-r	recursive (for directory)
 	-i	interactive (confirm before erasing)
+	-k	keep (randomize, but don't remove)
 <br><br>
 
 
@@ -21,3 +23,4 @@ Its randomness depends on crypto/rand.Reader in Go standard library.<br>
 	file-eraser file1
 	file-eraser -r file1 dir1
 	file-eraser -ri dir1
+	file-eraser -k file1

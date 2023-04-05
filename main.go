@@ -52,7 +52,9 @@ func main() {
 			wg.Add(1)
 			go func(path string, op option) {
 				defer wg.Done()
-				eraseDir(path, op, stdErr)
+				if err := eraseDir(path, op, stdErr); err != nil {
+					eprintf("error: %v\n", err)
+				}
 			}(arg, op)
 		default:
 			wg.Add(1)

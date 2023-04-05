@@ -49,7 +49,7 @@ func eraseDir(path string, interactive bool, errWriter io.Writer) error {
 			defer wg.Done()
 			if err := eraseFile(path, interactive); err != nil {
 				errOccurred.CompareAndSwap(false, true)
-				fmt.Fprintf(errWriter, "error: %v\n", err)
+				fmt.Fprintln(errWriter, err)
 			}
 		}(filepath.Join(path, entry.Name()))
 	}

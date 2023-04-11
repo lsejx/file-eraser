@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"sync"
 
 	fpath "github.com/lsejx/go-filepath"
@@ -12,14 +13,14 @@ func eprintf(format string, a ...any) {
 	fmt.Fprintf(stdErr, format, a...)
 }
 
-var helpMsg = fmt.Sprintf(`file-eraser [option] [path] ...
+var helpMsg = fmt.Sprintf(`%v [option] [path] ...
 
 options:
     %v help
     %c%c recursive (for directory)
     %c%c interactive (confirm before erasing)
     %c%c keep (randomize, but don't remove)
-`, helpOpFull, opPre, recOp, opPre, intOp, opPre, keepOp)
+`, filepath.Base(os.Args[0]), helpOpFull, opPre, recOp, opPre, intOp, opPre, keepOp)
 
 func main() {
 	args := os.Args[1:]

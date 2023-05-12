@@ -21,6 +21,9 @@ func newOption() option {
 }
 
 func (p *option) read(arg string) (changed bool) {
+	if len(arg) == 0 {
+		return false
+	}
 	changed = false
 	if arg[0] != opPre {
 		return false

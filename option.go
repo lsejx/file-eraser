@@ -20,25 +20,25 @@ func newOption() option {
 	return option{false, false, false}
 }
 
-func (p *option) read(arg string) (changed bool) {
+func (p *option) read(arg string) (isOption bool) {
 	if len(arg) == 0 {
 		return false
 	}
-	changed = false
+	isOption = false
 	if arg[0] != opPre {
 		return false
 	}
 	if strings.ContainsRune(arg, recOp) {
 		p.recursive = true
-		changed = true
+		isOption = true
 	}
 	if strings.ContainsRune(arg, intOp) {
 		p.interactive = true
-		changed = true
+		isOption = true
 	}
 	if strings.ContainsRune(arg, keepOp) {
 		p.keep = true
-		changed = true
+		isOption = true
 	}
-	return changed
+	return isOption
 }

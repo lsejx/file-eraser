@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/rand"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -23,6 +24,8 @@ func randomize(dst io.Writer, length int64) error {
 	return nil
 }
 
+var errCanceled = errors.New("canceled")
+
 func randomizeFile(path string, interactive bool) error {
 	if interactive {
 		yes, err := interacter.ask(path)
@@ -30,7 +33,7 @@ func randomizeFile(path string, interactive bool) error {
 			return fmt.Errorf("%v: input error: %v", path, err)
 		}
 		if !yes {
-			return nil
+			return errCanceled
 		}
 	}
 	f, err := os.OpenFile(path, os.O_WRONLY, 0600)

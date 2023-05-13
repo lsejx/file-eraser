@@ -60,7 +60,7 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 		wg.Add(1)
 		go func(path string, op option) {
 			defer wg.Done()
-			if err := eraseFile(path, op); err != nil {
+			if err := eraseFile(path, op); err != nil && !errors.Is(err, errCanceled) {
 				errOccurred.CompareAndSwap(false, true)
 				fmt.Fprintln(errWriter, err)
 			}

@@ -20,7 +20,7 @@ func eraseFile(path string, op option) error {
 	}
 	err = os.Remove(path)
 	if err != nil {
-		return catPathAndErr(path, "remove error", err)
+		return err
 	}
 	return nil
 }

@@ -23,7 +23,7 @@ func randomize(dst io.Writer, length int64) error {
 }
 
 func randomizeFile(path string, interactive bool) error {
-	errSummary := "randomize error"
+	errSummary := "randomize"
 	if interactive {
 		yes, err := interacter.ask(path)
 		if err != nil {

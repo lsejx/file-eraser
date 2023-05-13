@@ -39,6 +39,12 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 	errOccurred.Store(false)
 
 	for _, entry := range entries {
+		ePath := filepath.Join(path, entry.Name())
+		if !fl.isNew(ePath) {
+			continue
+		}
+
+		// directory
 		if entry.IsDir() {
 			wg.Add(1)
 			go func(path string, op option) {
@@ -46,9 +52,11 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 				if eraseDir(path, op, errWriter) != nil {
 					errOccurred.CompareAndSwap(false, true)
 				}
-			}(filepath.Join(path, entry.Name()), op)
+			}(ePath, op)
 			continue
 		}
+
+		// file
 		wg.Add(1)
 		go func(path string, op option) {
 			defer wg.Done()
@@ -56,7 +64,7 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 				errOccurred.CompareAndSwap(false, true)
 				fmt.Fprintln(errWriter, err)
 			}
-		}(filepath.Join(path, entry.Name()), op)
+		}(ePath, op)
 	}
 
 	wg.Wait()

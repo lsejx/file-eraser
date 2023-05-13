@@ -23,6 +23,8 @@ options:
     %c%c keep (randomize, but don't remove)
 `, filepath.Base(os.Args[0]), helpOpFull, opPre, recOp, opPre, intOp, opPre, keepOp)
 
+var fl = newFileList()
+
 func main() {
 	args := os.Args[1:]
 	if len(args) == 0 {
@@ -42,11 +44,16 @@ func main() {
 			continue
 		}
 
+		if !fl.isNew(arg) {
+			continue
+		}
+
 		tp := fpath.GetType(arg)
 		switch {
 		case tp.IsNotExisting():
 			eprintf("%v: not found\n", arg)
 		case tp.IsDir():
+			// directory
 			if !op.recursive {
 				eprintf("%v: is a directory\n", arg)
 				continue
@@ -61,6 +68,7 @@ func main() {
 				}
 			}(arg, op)
 		default:
+			// file
 			wg.Add(1)
 			go func(path string, op option) {
 				defer wg.Done()

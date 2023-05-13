@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/rand"
+	"fmt"
 	"io"
 	"os"
 )
@@ -23,11 +24,10 @@ func randomize(dst io.Writer, length int64) error {
 }
 
 func randomizeFile(path string, interactive bool) error {
-	errSummary := "randomize"
 	if interactive {
 		yes, err := interacter.ask(path)
 		if err != nil {
-			return catPathAndErr(path, errSummary, err)
+			return fmt.Errorf("%v: input error: %v", path, err)
 		}
 		if !yes {
 			return nil
@@ -35,18 +35,18 @@ func randomizeFile(path string, interactive bool) error {
 	}
 	f, err := os.OpenFile(path, os.O_WRONLY, 0600)
 	if err != nil {
-		return catPathAndErr(path, errSummary, err)
+		return fmt.Errorf("%v: randomization error: %v", path, parsePathErr(err))
 	}
 	defer f.Close()
 
 	stat, err := f.Stat()
 	if err != nil {
-		return catPathAndErr(path, errSummary, err)
+		return fmt.Errorf("%v: randomization error: %v", path, parsePathErr(err))
 	}
 
 	err = randomize(f, stat.Size())
 	if err != nil {
-		return catPathAndErr(path, errSummary, err)
+		return fmt.Errorf("%v: randomization error: %v", path, err)
 	}
 	return nil
 }

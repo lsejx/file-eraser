@@ -20,7 +20,7 @@ func eraseFile(path string, op option) error {
 	}
 	err = os.Remove(path)
 	if err != nil {
-		return err
+		return fmt.Errorf("%v: removal error: %v", path, parsePathErr(err))
 	}
 	return nil
 }
@@ -30,7 +30,7 @@ var errErrOccurred = errors.New("error occured")
 func eraseDir(path string, op option, errWriter io.Writer) error {
 	entries, err := os.ReadDir(path)
 	if err != nil {
-		return err
+		return fmt.Errorf("%v: erasure error: %v", path, parsePathErr(err))
 	}
 
 	var wg sync.WaitGroup
@@ -74,5 +74,9 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 	if op.keep {
 		return nil
 	}
-	return os.Remove(path)
+	err = os.Remove(path)
+	if err != nil {
+		return fmt.Errorf("%v: removal error: %v", path, parsePathErr(err))
+	}
+	return nil
 }

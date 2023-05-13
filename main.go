@@ -51,7 +51,7 @@ func main() {
 		tp := fpath.GetType(arg)
 		switch {
 		case tp.IsNotExisting():
-			eprintf("%v: not found\n", arg)
+			eprintf("%v: is not existing\n", arg)
 		case tp.IsDir():
 			// directory
 			if !op.recursive {
@@ -63,7 +63,7 @@ func main() {
 				defer wg.Done()
 				if err := eraseDir(path, op, stdErr); err != nil {
 					if !errors.Is(err, errErrOccurred) {
-						eprintf("error: %v\n", err)
+						eprintf("%v\n", err)
 					}
 				}
 			}(arg, op)

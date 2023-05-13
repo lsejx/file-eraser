@@ -30,6 +30,6 @@ func (fl *fileList) isNew(path string) bool {
 	if ok {
 		return false
 	}
-	fl.m[path] = 0
+	fl.m[abs] = 0
 	return true
 }

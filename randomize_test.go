@@ -31,15 +31,15 @@ func TestRandomize(t *testing.T) {
 
 func TestRandomizeFile(t *testing.T) {
 	tests := []struct {
-		path string
-		i    bool
+		p string
+		i bool
 	}{
 		{"./test/randomize1.txt", false},
 	}
 	for _, tt := range tests {
-		err := randomizeFile(tt.path, tt.i)
+		err := randomizeFile(tt.p, tt.i)
 		if err != nil {
-			t.Fatalf("path:%v, err:%v", tt.path, err)
+			t.Fatalf("path:%v, err:%v", tt.p, err)
 		}
 	}
 }

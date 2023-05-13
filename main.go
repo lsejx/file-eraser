@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -54,7 +55,9 @@ func main() {
 			go func(path string, op option) {
 				defer wg.Done()
 				if err := eraseDir(path, op, stdErr); err != nil {
-					eprintf("error: %v\n", err)
+					if !errors.Is(err, errErrOccurred) {
+						eprintf("error: %v\n", err)
+					}
 				}
 			}(arg, op)
 		default:

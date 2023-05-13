@@ -25,6 +25,8 @@ func eraseFile(path string, op option) error {
 	return nil
 }
 
+var errErrOccurred = errors.New("error occured")
+
 func eraseDir(path string, op option, errWriter io.Writer) error {
 	entries, err := os.ReadDir(path)
 	if err != nil {
@@ -59,7 +61,7 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 
 	wg.Wait()
 	if errOccurred.Load() {
-		return errors.New("error occurred")
+		return errErrOccurred
 	}
 	if op.keep {
 		return nil

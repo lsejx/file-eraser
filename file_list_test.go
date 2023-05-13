@@ -18,10 +18,10 @@ func TestNewFileList(t *testing.T) {
 func TestIsNew(t *testing.T) {
 	fl := &fileList{m: make(map[string]byte)}
 	if !fl.isNew("test") {
-		t.Fatal(fl.m["test"])
+		t.Fatal(fl.m)
 	}
 	if fl.isNew("test") {
-		t.FailNow()
+		t.Fatal(fl.m)
 	}
 	if len(fl.m) != 1 {
 		t.Fatal(len(fl.m), fl.m)

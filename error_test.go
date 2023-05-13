@@ -2,25 +2,22 @@ package main
 
 import (
 	"errors"
+	"io/fs"
 	"testing"
 )
 
-func TestCatPathAndErr(t *testing.T) {
+func TestParsePathErr(t *testing.T) {
 	tests := []struct {
-		p   string
-		s   string
-		e   error
+		err error
 		ret string
 	}{
-		{"/root", "test-err", errors.New("test"), "/root: test-err, test"},
+		{fs.ErrPermission, "permission denied"},
+		{errors.New("test"), "test"},
 	}
 	for _, tt := range tests {
-		err := catPathAndErr(tt.p, tt.s, tt.e)
-		if err == nil {
-			t.Fatalf("path:%v, nil", tt.p)
-		}
+		err := parsePathErr(tt.err)
 		if err.Error() != tt.ret {
-			t.Fatalf("err:%v, e:%v", err, tt.ret)
+			t.Fatalf("err:%v, w:%v", err, tt.ret)
 		}
 	}
 }

@@ -42,19 +42,6 @@ func (p *interactT) ask(path string) (bool, error) {
 	return ans == "y", nil
 }
 
-// stderr during interaction
-type stdErrT struct{ *interactT }
-
-var stdErr *stdErrT
-
-func (p *stdErrT) Write(b []byte) (n int, err error) {
-	p.Lock()
-	defer p.Unlock()
-	return os.Stderr.Write(b)
-}
-
 func init() {
 	interacter = new(interactT)
-	stdErr = new(stdErrT)
-	stdErr.interactT = interacter
 }

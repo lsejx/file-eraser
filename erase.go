@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -58,7 +59,7 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 
 	wg.Wait()
 	if errOccurred.Load() {
-		return nil
+		return errors.New("error occurred")
 	}
 	if op.keep {
 		return nil

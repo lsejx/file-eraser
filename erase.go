@@ -10,24 +10,41 @@ import (
 	"sync/atomic"
 )
 
-func eraseFile(path string, op option) error {
-	err := randomizeFile(path, op.interactive)
+func handleAskResult(operation string, path string) error {
+	yes, err := interacter.ask(operation, path)
 	if err != nil {
+		return fmt.Errorf("%v: input error: %v", path, err)
+	}
+	if !yes {
+		return errCanceled
+	}
+	return nil
+}
+
+func eraseFile(path string, op option) error {
+	if op.interactive {
+		if err := handleAskResult("erase", path); err != nil {
+			return err
+		}
+	}
+	if err := randomizeFile(path); err != nil {
 		return err
 	}
 	if op.keep {
 		return nil
 	}
-	err = os.Remove(path)
-	if err != nil {
+	if err := os.Remove(path); err != nil {
 		return fmt.Errorf("%v: removal error: %v", path, parsePathErr(err))
 	}
 	return nil
 }
 
-var errErrOccurred = errors.New("error occured")
-
 func eraseDir(path string, op option, errWriter io.Writer) error {
+	if op.interactive {
+		if err := handleAskResult("descend into", path); err != nil {
+			return err
+		}
+	}
 	entries, err := os.ReadDir(path)
 	if err != nil {
 		return fmt.Errorf("%v: erasure error: %v", path, parsePathErr(err))
@@ -60,9 +77,11 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 		wg.Add(1)
 		go func(path string, op option) {
 			defer wg.Done()
-			if err := eraseFile(path, op); err != nil && !errors.Is(err, errCanceled) {
+			if err := eraseFile(path, op); err != nil {
 				errOccurred.CompareAndSwap(false, true)
-				fmt.Fprintln(errWriter, err)
+				if !errors.Is(err, errCanceled) {
+					fmt.Fprintln(errWriter, err)
+				}
 			}
 		}(ePath, op)
 	}
@@ -74,8 +93,12 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 	if op.keep {
 		return nil
 	}
-	err = os.Remove(path)
-	if err != nil {
+	if op.interactive {
+		if err = handleAskResult("remove", path); err != nil {
+			return err
+		}
+	}
+	if err = os.Remove(path); err != nil {
 		return fmt.Errorf("%v: removal error: %v", path, parsePathErr(err))
 	}
 	return nil

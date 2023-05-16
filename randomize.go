@@ -2,7 +2,6 @@ package main
 
 import (
 	"crypto/rand"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -11,31 +10,18 @@ import (
 func randomize(dst io.Writer, length int64) error {
 	buf := make([]byte, length)
 
-	_, err := io.ReadFull(rand.Reader, buf)
-	if err != nil {
+	if _, err := io.ReadFull(rand.Reader, buf); err != nil {
 		return err
 	}
 
-	_, err = dst.Write(buf)
-	if err != nil {
+	if _, err := dst.Write(buf); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-var errCanceled = errors.New("canceled")
-
-func randomizeFile(path string, interactive bool) error {
-	if interactive {
-		yes, err := interacter.ask(path)
-		if err != nil {
-			return fmt.Errorf("%v: input error: %v", path, err)
-		}
-		if !yes {
-			return errCanceled
-		}
-	}
+func randomizeFile(path string) error {
 	f, err := os.OpenFile(path, os.O_WRONLY, 0600)
 	if err != nil {
 		return fmt.Errorf("%v: randomization error: %v", path, parsePathErr(err))
@@ -47,8 +33,7 @@ func randomizeFile(path string, interactive bool) error {
 		return fmt.Errorf("%v: randomization error: %v", path, parsePathErr(err))
 	}
 
-	err = randomize(f, stat.Size())
-	if err != nil {
+	if err = randomize(f, stat.Size()); err != nil {
 		return fmt.Errorf("%v: randomization error: %v", path, err)
 	}
 	return nil

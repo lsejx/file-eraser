@@ -24,12 +24,12 @@ type interactT struct{ sync.Mutex }
 
 var interacter *interactT
 
-func (p *interactT) ask(path string) (bool, error) {
+func (p *interactT) ask(operation string, path string) (bool, error) {
 	p.Lock()
 	defer p.Unlock()
 	var ans string
 	for {
-		fmt.Printf("erase %v? (y/n) > ", path)
+		fmt.Printf("%v %v? (y/n) > ", operation, path)
 		var err error
 		ans, err = readLine()
 		if err != nil {

@@ -2,36 +2,39 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
+	"io"
 	"os"
 	"sync"
 )
 
-var readLine = func() func() (string, error) {
-	sc := bufio.NewScanner(os.Stdin)
-	sc.Buffer(make([]byte, 1024*64), 1024*1024)
-	sc.Split(bufio.ScanLines)
-	return func() (string, error) {
-		ok := sc.Scan()
-		if !ok {
-			return "", sc.Err()
+type interactT struct {
+	sync.Mutex
+	out io.Writer
+	sc  *bufio.Scanner
+}
+
+func (p *interactT) readLine() (string, error) {
+	ok := p.sc.Scan()
+	if !ok {
+		err := p.sc.Err()
+		if err == nil {
+			return "", errors.New("EOF")
 		}
-		return sc.Text(), nil
+		return "", err
 	}
-}()
-
-type interactT struct{ sync.Mutex }
-
-var interacter *interactT
+	return p.sc.Text(), nil
+}
 
 func (p *interactT) ask(operation string, path string) (bool, error) {
 	p.Lock()
 	defer p.Unlock()
 	var ans string
 	for {
-		fmt.Printf("%v %v? (y/n) > ", operation, path)
+		fmt.Fprintf(p.out, "%v %v? (y/n) > ", operation, path)
 		var err error
-		ans, err = readLine()
+		ans, err = p.readLine()
 		if err != nil {
 			return false, err
 		}
@@ -42,6 +45,14 @@ func (p *interactT) ask(operation string, path string) (bool, error) {
 	return ans == "y", nil
 }
 
-func init() {
-	interacter = new(interactT)
+func newLineScanner(in io.Reader) *bufio.Scanner {
+	sc := bufio.NewScanner(in)
+	sc.Buffer(make([]byte, 1024*64), 1024*1024)
+	sc.Split(bufio.ScanLines)
+	return sc
+}
+
+var interacter = &interactT{
+	out: os.Stdout,
+	sc:  newLineScanner(os.Stdin),
 }

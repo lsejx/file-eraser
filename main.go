@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,10 +8,6 @@ import (
 
 	fpath "github.com/lsejx/go-filepath"
 )
-
-func eprintf(format string, a ...any) {
-	fmt.Fprintf(stdErr, format, a...)
-}
 
 var helpMsg = fmt.Sprintf(`%v [option] [path] ...
 
@@ -61,7 +56,7 @@ func main() {
 			wg.Add(1)
 			go func(path string, op option) {
 				defer wg.Done()
-				if err := eraseDir(path, op, stdErr); err != nil && !errors.Is(err, errErrOccurred) {
+				if err := eraseDir(path, op, stdErr); err != nil && isRealErr(err) {
 					eprintf("%v\n", err)
 				}
 			}(arg, op)
@@ -70,7 +65,7 @@ func main() {
 			wg.Add(1)
 			go func(path string, op option) {
 				defer wg.Done()
-				if err := eraseFile(path, op); err != nil {
+				if err := eraseFile(path, op); err != nil && isRealErr(err) {
 					eprintf("%v\n", err)
 				}
 			}(arg, op)

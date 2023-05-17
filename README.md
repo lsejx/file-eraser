@@ -12,6 +12,7 @@ Its randomness depends on crypto/rand.Reader in Go standard library.<br>
 
 # Option
 	-h	help
+	-v	version
 	-r	recursive (for directory)
 	-i	interactive (confirm before erasing)
 	-k	keep (randomize, but don't remove)
@@ -20,6 +21,7 @@ Its randomness depends on crypto/rand.Reader in Go standard library.<br>
 
 # Usage
 	file-eraser -h
+	file-eraser -v
 	file-eraser file1
 	file-eraser -r file1 dir1
 	file-eraser -ri dir1

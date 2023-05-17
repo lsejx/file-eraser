@@ -9,14 +9,17 @@ import (
 	fpath "github.com/lsejx/go-filepath"
 )
 
+const version = "v0.1.5"
+
 var helpMsg = fmt.Sprintf(`%v [option] [path] ...
 
 options:
     %v help
+    %v version
     %c%c recursive (for directory)
     %c%c interactive (confirm before erasing)
     %c%c keep (randomize, but don't remove)
-`, filepath.Base(os.Args[0]), helpOpFull, opPre, recOp, opPre, intOp, opPre, keepOp)
+`, filepath.Base(os.Args[0]), helpOpFull, verOpFull, opPre, recOp, opPre, intOp, opPre, keepOp)
 
 var fl = newFileList()
 
@@ -28,6 +31,10 @@ func main() {
 	}
 	if args[0] == helpOpFull {
 		fmt.Print(helpMsg)
+		return
+	}
+	if args[0] == verOpFull {
+		fmt.Println(version)
 		return
 	}
 

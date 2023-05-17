@@ -5,6 +5,7 @@ import "strings"
 const (
 	opPre      = '-'
 	helpOpFull = "-h"
+	verOpFull  = "-v"
 	recOp      = 'r'
 	intOp      = 'i'
 	keepOp     = 'k'

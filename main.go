@@ -9,7 +9,7 @@ import (
 	fpath "github.com/lsejx/go-filepath"
 )
 
-const version = "v0.1.5"
+const version = "v0.2.0"
 
 var helpMsg = fmt.Sprintf(`%v [option] [path] ...
 

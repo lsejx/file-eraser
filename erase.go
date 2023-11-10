@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"sync"
 	"sync/atomic"
+
+	fpath "github.com/lsejx/go-filepath"
 )
 
 func handleAskResult(operation string, path string) error {
@@ -61,8 +63,8 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 			continue
 		}
 
-		// directory
 		if entry.IsDir() {
+			// directory
 			wg.Add(1)
 			go func(path string, op option) {
 				defer wg.Done()
@@ -73,17 +75,24 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 			continue
 		}
 
-		// file
-		wg.Add(1)
-		go func(path string, op option) {
-			defer wg.Done()
-			if err := eraseFile(path, op); err != nil {
-				errOccurred.CompareAndSwap(false, true)
-				if !errors.Is(err, errCanceled) {
-					fmt.Fprintln(errWriter, err)
+		tp := fpath.GetType(ePath)
+		if tp.IsRegularFile() {
+			// file
+			wg.Add(1)
+			go func(path string, op option) {
+				defer wg.Done()
+				if err := eraseFile(path, op); err != nil {
+					errOccurred.CompareAndSwap(false, true)
+					if !errors.Is(err, errCanceled) {
+						fmt.Fprintln(errWriter, err)
+					}
 				}
-			}
-		}(ePath, op)
+			}(ePath, op)
+			continue
+		}
+
+		errOccurred.CompareAndSwap(false, true)
+		fmt.Fprintln(errWriter, fmt.Errorf("%v: is neither a regular file nor a directory", ePath))
 	}
 
 	wg.Wait()

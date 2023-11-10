@@ -67,7 +67,7 @@ func main() {
 					eprintf("%v\n", err)
 				}
 			}(arg, op)
-		default:
+		case tp.IsRegularFile():
 			// file
 			wg.Add(1)
 			go func(path string, op option) {
@@ -76,6 +76,8 @@ func main() {
 					eprintf("%v\n", err)
 				}
 			}(arg, op)
+		default:
+			eprintf("%v: is neither a regular file nor a directory\n", arg)
 		}
 	}
 	wg.Wait()

@@ -21,6 +21,7 @@ func randomize(dst io.Writer, length int64) error {
 	return nil
 }
 
+// This randomizes, seeks, and truncates the file!!!!!!!!!!!!!!!
 func randomizeFile(path string) error {
 	f, err := os.OpenFile(path, os.O_WRONLY, 0600)
 	if err != nil {
@@ -36,5 +37,13 @@ func randomizeFile(path string) error {
 	if err = randomize(f, stat.Size()); err != nil {
 		return fmt.Errorf("%v: randomization error: %v", path, err)
 	}
+
+	if _, err = f.Seek(0, 0); err != nil {
+		return fmt.Errorf("%v: seek error: %v", path, err)
+	}
+	if err = f.Truncate(0); err != nil {
+		return fmt.Errorf("%v: truncation error: %v", path, parsePathErr(err))
+	}
+
 	return nil
 }

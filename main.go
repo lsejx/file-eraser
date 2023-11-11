@@ -18,7 +18,7 @@ options:
     %v version
     %c%c recursive (for directory)
     %c%c interactive (confirm before erasing)
-    %c%c keep (randomize, seeks, truncates, but don't remove)
+    %c%c keep (randomize, seek, truncate, but don't remove)
 `, filepath.Base(os.Args[0]), helpOpFull, verOpFull, opPre, recOp, opPre, intOp, opPre, keepOp)
 
 var fl = newFileList()

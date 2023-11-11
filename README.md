@@ -15,7 +15,7 @@ Its randomness depends on crypto/rand.Reader in Go standard library.<br>
 	-v	version
 	-r	recursive (for directory)
 	-i	interactive (confirm before erasing)
-	-k	keep (randomize, seeks, truncates, but don't remove)
+	-k	keep (randomize, seek, truncate, but don't remove)
 <br><br>
 
 

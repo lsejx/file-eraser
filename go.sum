@@ -2,3 +2,5 @@ github.com/lsejx/go-filepath v0.0.0 h1:xPYOhikXZe40yk6rW4lyGTWliqbFrGEo6bzJvLzAr
 github.com/lsejx/go-filepath v0.0.0/go.mod h1:CotaSJk6bd/4iXMU4+cYrccG6XqSliaGWwJ3wGqmPJ8=
 github.com/lsejx/go-filepath v0.2.0 h1:hqMmEIMeNa9hAOm+qLYpWpVOF5DaJ/crEA/97mVpb2g=
 github.com/lsejx/go-filepath v0.2.0/go.mod h1:CotaSJk6bd/4iXMU4+cYrccG6XqSliaGWwJ3wGqmPJ8=
+github.com/lsejx/go-filepath v0.2.2 h1:T6AF4vSPwSZnganIMv3m7B9fzmLCw+5dzec9yGDh/1Q=
+github.com/lsejx/go-filepath v0.2.2/go.mod h1:CotaSJk6bd/4iXMU4+cYrccG6XqSliaGWwJ3wGqmPJ8=

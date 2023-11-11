@@ -75,7 +75,11 @@ func eraseDir(path string, op option, errWriter io.Writer) error {
 			continue
 		}
 
-		tp := fpath.GetType(ePath)
+		tp, err := fpath.GetType(ePath)
+		if err != nil {
+			errOccurred.CompareAndSwap(false, true)
+			fmt.Fprintln(errWriter, fmt.Errorf("%v: %v", ePath, err))
+		}
 		if tp.IsRegularFile() {
 			// file
 			wg.Add(1)

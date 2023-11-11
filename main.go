@@ -50,7 +50,10 @@ func main() {
 			continue
 		}
 
-		tp := fpath.GetType(arg)
+		tp, err := fpath.GetType(arg)
+		if err != nil {
+			eprintf("%v: %v\n", arg, err)
+		}
 		switch {
 		case tp.IsNotExisting():
 			eprintf("%v: is not existing\n", arg)
